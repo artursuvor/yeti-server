@@ -1,0 +1,4 @@
+lexik_jwt_authentication:
+    secret_key: 'thisIsMySecretKey123!'
+    public_key: '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5pUuYJdYEkYMjzHLWuG4\nqgEwucsdFDVSqd9rQIDAQAB\n-----END PUBLIC KEY-----'
+    pass_phrase: 'mySecretPassphrase123!'
