@@ -39,6 +39,13 @@ jobs:
           cat /tmp/composer-after.json
       - name: Verify PHP source syntax
         run: find src tests -name '*.php' -print0 | xargs -0 -r -n1 php -l
+      - name: Install and boot the Symfony test kernel
+        env:
+          APP_ENV: test
+          APP_SECRET: github-audit-test
+        run: |
+          composer install --no-plugins --no-scripts --no-interaction --prefer-dist
+          php -r 'require "vendor/autoload.php"; (new Symfony\Component\Dotenv\Dotenv())->bootEnv(".env"); $kernel = new App\Kernel("test", false); $kernel->boot(); echo "KERNEL_BOOT_OK\n";'
       - name: Commit lockfile fixes
         run: |
           git add composer.json composer.lock
