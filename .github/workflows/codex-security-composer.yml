@@ -16,16 +16,32 @@ jobs:
           composer --version
           composer audit --locked --format=json --no-plugins --no-scripts > /tmp/composer-before.json || true
           cat /tmp/composer-before.json
-      - name: Apply compatible dependency updates
-        run: composer update --no-install --no-scripts --no-plugins --no-interaction --with-all-dependencies || true
+      - name: Move Symfony to the maintained PHP 8.2 compatible LTS branch
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('composer.json')
+          data = json.loads(path.read_text())
+          for section in ('require', 'require-dev'):
+              for name, version in data.get(section, {}).items():
+                  if name.startswith('symfony/') and version == '7.0.*':
+                      data[section][name] = '7.4.*'
+          data['extra']['symfony']['require'] = '7.4.*'
+          path.write_text(json.dumps(data, indent=4, ensure_ascii=False) + '\n')
+          PY
+          composer update --no-install --no-scripts --no-plugins --no-interaction --with-all-dependencies --no-security-blocking
+
       - name: Audit updated PHP dependencies
         run: |
           composer validate --no-check-publish --no-plugins || true
           composer audit --locked --format=json --no-plugins --no-scripts > /tmp/composer-after.json || true
           cat /tmp/composer-after.json
+      - name: Verify PHP source syntax
+        run: find src tests -name '*.php' -print0 | xargs -0 -r -n1 php -l
       - name: Commit lockfile fixes
         run: |
-          git add composer.lock
+          git add composer.json composer.lock
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
