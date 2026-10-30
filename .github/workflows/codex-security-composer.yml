@@ -1,0 +1,34 @@
+name: Temporary Composer security audit
+on:
+  push:
+    branches: [codex/security-audit-2026-10-30]
+    paths: [.github/workflows/codex-security-composer.yml]
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Audit locked PHP dependencies
+        run: |
+          composer --version
+          composer audit --locked --format=json --no-plugins --no-scripts > /tmp/composer-before.json || true
+          cat /tmp/composer-before.json
+      - name: Apply compatible dependency updates
+        run: composer update --no-install --no-scripts --no-plugins --no-interaction --with-all-dependencies || true
+      - name: Audit updated PHP dependencies
+        run: |
+          composer validate --no-check-publish --no-plugins || true
+          composer audit --locked --format=json --no-plugins --no-scripts > /tmp/composer-after.json || true
+          cat /tmp/composer-after.json
+      - name: Commit lockfile fixes
+        run: |
+          git add composer.lock
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "fix: update vulnerable PHP dependencies"
+            git push origin HEAD:codex/security-audit-2026-10-30
+          fi
