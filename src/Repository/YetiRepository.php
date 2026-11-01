@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use Yeti;
-use YetiCrudException;
+use App\Object\Yeti;
+use App\Exception\YetiCrudException;
 
 final class YetiRepository extends AbstractRepository
 {

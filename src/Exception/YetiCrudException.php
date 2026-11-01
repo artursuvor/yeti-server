@@ -1,5 +1,7 @@
 <?php
 
-final class YetiCrudException extends Exception 
+namespace App\Exception;
+
+final class YetiCrudException extends \Exception 
 {
 }

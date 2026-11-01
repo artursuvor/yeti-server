@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Object;
+
 final class Review
 {
     public function __construct(

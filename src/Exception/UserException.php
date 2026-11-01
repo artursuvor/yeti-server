@@ -1,5 +1,7 @@
 <?php
 
-final class UserException extends Exception 
+namespace App\Exception;
+
+final class UserException extends \Exception 
 {
 }

@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use Review;
-use ReviewException;
+use App\Object\Review;
+use App\Exception\ReviewException;
 
 final class ReviewRepository extends AbstractRepository
 {

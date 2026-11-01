@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Object;
+
 final class Yeti 
 {
   public function __construct(
