@@ -12,11 +12,6 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     App\Controller\YetiController:
         tags: ['controller.service_arguments']
-    App\Service\PasswordEncoder:
-        arguments: ['@security.password_encoder']
-    App\Controller\SecurityController:
-        arguments:
-            $passwordEncoder: '@security.password_encoder'
 
 
     # makes classes in src/ available to be used as services
@@ -26,6 +21,8 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/Object/'
+            - '../src/Exception/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed

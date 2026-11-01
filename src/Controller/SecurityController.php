@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ class SecurityController extends AbstractController
          $credentials = $request->toArray();
 
          if (!$this->isValidCredentials($credentials)) {
-             throw new \UserException('Invalid credentials');
+             throw new \App\Exception\UserException('Invalid credentials');
          }        
  
          $response = new Response();
@@ -48,7 +48,7 @@ class SecurityController extends AbstractController
         $user = $this->userRepository->getUserByLogin($username);
 
         if ($user === null || !$user->verifyPassword($password)) {
-            throw new \UserException('Invalid credentials ' . $user->getUsername());
+            throw new \App\Exception\UserException('Invalid credentials ' . $user->getUsername());
         }
 
         return true;

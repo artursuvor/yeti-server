@@ -1,5 +1,7 @@
 <?php
 
-final class ReviewException extends Exception 
+namespace App\Exception;
+
+final class ReviewException extends \Exception 
 {
 }

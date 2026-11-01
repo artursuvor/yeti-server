@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Repository\AbstractRepository;
-use User;
+use App\Object\User;
 
 final class UserRepository extends AbstractRepository
 {
